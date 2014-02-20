@@ -66,11 +66,9 @@ public class FirstComeFirstServed
     public void displayProcesses()
     {
         introduceProcess();
-        
-        String path = "~/Desktop/git149Assignments/CS149-HW02/newFile.txt";
-        path = path.replace("~",System.getProperty("user.home"));
-         try {
-			File file = new File(path);
+      
+        try {
+			File file = new File("test", "newFile.txt");
 
 			// if file doesnt exists, then create it
 			if (!file.exists()) {
