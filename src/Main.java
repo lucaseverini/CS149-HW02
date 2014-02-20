@@ -16,8 +16,10 @@ public class Main
         ArrayList<Process> processArrayList = new ArrayList<>();
         ProcessGenerator newProcesses = new ProcessGenerator(10);
         processArrayList = newProcesses.generateProcesses();
-		FirstComeFirstServed a = new FirstComeFirstServed(processArrayList);
-                a.displayProcesses();
+        
+	FirstComeFirstServed a = new FirstComeFirstServed(processArrayList);
+        
+        a.displayProcesses();
         
         
         

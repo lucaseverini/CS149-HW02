@@ -43,7 +43,7 @@ public class FirstComeFirstServed
             
             if(letterCounter < 91){//this dictates 
         content += firstNumber + "-" + (char)(letterCounter) + ":  ";//
-        content += processArrayList.toString();
+        content += processArrayList.get(i).toString();
         letterCounter++;
             }else{
                 letterCounter = 65;
@@ -56,17 +56,9 @@ public class FirstComeFirstServed
             
         }
         
-        
-        
-        
-        
     }
     
-    
-    
-    
-    
-    
+
     /**
      * An example of a method - replace this comment with your own
      * 
@@ -74,8 +66,11 @@ public class FirstComeFirstServed
     public void displayProcesses()
     {
         introduceProcess();
-        try {
-			File file = new File("~Desktop/git149Assignments/CS149-HW02");
+        
+        String path = "~/Desktop/git149Assignments/CS149-HW02/newFile.txt";
+        path = path.replace("~",System.getProperty("user.home"));
+         try {
+			File file = new File(path);
 
 			// if file doesnt exists, then create it
 			if (!file.exists()) {
