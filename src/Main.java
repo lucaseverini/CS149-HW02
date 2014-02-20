@@ -17,10 +17,6 @@ public class Main
         ProcessGenerator newProcesses = new ProcessGenerator(10);
         processArrayList = newProcesses.generateProcesses();
 		FirstComeFirstServed a = new FirstComeFirstServed(processArrayList);
-                a.displayProcesses();
-        
-        
-        
-		System.out.println("Yet another commit test...");
-    }
+        a.displayProcesses();
+     }
 }
