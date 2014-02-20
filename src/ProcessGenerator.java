@@ -1,10 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
-
 import java.util.*;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -66,9 +59,12 @@ public class ProcessGenerator
             newProcess = new Process(arrivalTime, expectedTime, priority);
             //put the Process object in array processArray using i as index
             processArrayList.add(newProcess);
-            System.out.println(processArrayList.get(i).getArrivalTime()
+            
+            System.out.print(newProcess.toString());
+            /*System.out.println(processArrayList.get(i).getArrivalTime()
                 + "  " + processArrayList.get(i).getExpectedTime()
                 + "  " + processArrayList.get(i).getPriority());
+                    */
         }
         System.out.println("\n  ");
 
@@ -83,6 +79,7 @@ public class ProcessGenerator
             });
 
         for(int i = 0; i < numProcesses; i++){
+            
             System.out.println("arrival time:  " + processArrayList.get(i).getArrivalTime()
                 + "  " + processArrayList.get(i).getExpectedTime()
                 + "  " + processArrayList.get(i).getPriority());

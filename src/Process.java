@@ -1,11 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
-
-
 /**
  * Write a description of class Process here.
  *
@@ -21,6 +13,9 @@ public class Process
 
     /**
      * Constructor for objects of class Process
+     * @param arrivalTime
+     * @param expectedTime
+     * @param priority
      */
     public Process(float arrivalTime, float expectedTime, int priority)
     {
@@ -63,9 +58,8 @@ public class Process
     }
 
     /**
-     * This returns the arrival time value
+     * This sets the arrival time value
      *
-     * @return     value of arrivalTime
      */
     public void setArrivalTime(float arrivalTime)
     {
@@ -74,9 +68,8 @@ public class Process
     }
 
     /**
-     * This returns the expected time value
+     * This sets the expected time value
      *
-     * @return     value of arrivalTime
      */
     public  void setExpectedTime(float expectedTime)
     {
@@ -85,14 +78,30 @@ public class Process
     }
 
     /**
-     * This returns the priority value
+     * This sets the priority value
      *
-     * @return     value of priority
      */
     public void setPriority(int priority)
     {
         // put your code here
         this.priority = priority;
+    }
+    
+        /**
+     * This sets the priority value
+     *
+     * @return processString is a string made up of the values in the object
+     */
+    @Override
+    public String toString()
+    {
+        String processString;
+        processString = "Arrival time is: " + arrivalTime 
+                + ",  Expected time is:  " + expectedTime
+                + ",  Priority is:  " + priority + ".\n";
+        
+        return processString;
+
     }
 
 }
