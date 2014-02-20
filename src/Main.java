@@ -17,6 +17,6 @@ public class Main
         ProcessGenerator newProcesses = new ProcessGenerator(10);
         processArrayList = newProcesses.generateProcesses();
 		
-		System.out.println("Commit Test...");
+		System.out.println("Yet another commit test...");
     }
 }
