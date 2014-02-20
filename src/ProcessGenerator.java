@@ -20,6 +20,7 @@ public class ProcessGenerator
     private ArrayList<Process> processArrayList;
     private Random generator;
     private Process newProcess;
+    private int RandomSeed;
 
     /**
      * Constructor: objects of ProcessGenerator
@@ -27,11 +28,12 @@ public class ProcessGenerator
      * be generated
      * @param numProcesses: an integer, number of processes to be created
      */
-    public ProcessGenerator(int numProcesses)
+    public ProcessGenerator(int numProcesses, int RandomSeed)
     {
         // initialise instance variables
         this.numProcesses = numProcesses;
         processArrayList = new ArrayList<Process>();
+        this.RandomSeed = RandomSeed;
 
     }
 
@@ -46,7 +48,7 @@ public class ProcessGenerator
         float arrivalTime;
         float expectedTime;
         int priority;
-        generator = new Random(1); //paramater is seed used for random number generator
+        generator = new Random(RandomSeed); //paramater is seed used for random number generator
 
         for(int i = 0; i < numProcesses; i++){
             //create random number for arrival time
