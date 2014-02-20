@@ -6,35 +6,34 @@
 
 
 import java.util.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 /**
- * Write a description of class RoundRobin here.
+ * Round Robin is preemptive
+ * Round Robin completes high priority jobs before low priority ones
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @RomeoStevens
  */
 public class RoundRobin
 {
-    // instance variables - replace the example below with your own
-    private int x;
+    // instance variables
+    private ArrayList<Process> processArrayList;
+    private String content; 
 
     /**
      * Constructor for objects of class RoundRobin
      */
-    public RoundRobin()
+    public RoundRobin(ArrayList<Process> processArrayList)
     {
         // initialise instance variables
-        x = 0;
+       this.processArrayList = processArrayList;
     }
 
-    /**
-     * An example of a method - replace this comment with your own
-     *
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y
-     */
-    public int sampleMethod(int y)
+  
+    public int RR(int y)
     {
-        // put your code here
-        return x + y;
+        return y + y;
     }
 }
