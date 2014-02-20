@@ -16,5 +16,7 @@ public class Main
         ArrayList<Process> processArrayList = new ArrayList<>();
         ProcessGenerator newProcesses = new ProcessGenerator(10);
         processArrayList = newProcesses.generateProcesses();
+		
+		System.out.println("Commit Test...");
     }
 }
