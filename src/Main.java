@@ -16,7 +16,7 @@ public class Main
         ArrayList<Process> processArrayList = new ArrayList<>();
         //ProcessGenerator: first parameter is number of processes to generate
         //                  second parameter is seed number for random function.
-        ProcessGenerator newProcesses = new ProcessGenerator(10, 1);
+        ProcessGenerator newProcesses = new ProcessGenerator(100, 1);
         processArrayList = newProcesses.generateProcesses();
         
         

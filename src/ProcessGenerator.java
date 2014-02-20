@@ -62,13 +62,15 @@ public class ProcessGenerator
             //put the Process object in array processArray using i as index
             processArrayList.add(newProcess);
             
-            System.out.print(newProcess.toString());
+            //System.out.print(newProcess.toString());
+            
+            
             /*System.out.println(processArrayList.get(i).getArrivalTime()
                 + "  " + processArrayList.get(i).getExpectedTime()
                 + "  " + processArrayList.get(i).getPriority());
                     */
         }
-        System.out.println("\n  ");
+        //System.out.println("\n  ");
 
         Collections.sort(processArrayList, new Comparator<Process>()
             {
@@ -80,12 +82,12 @@ public class ProcessGenerator
                 }
             });
 
-        for(int i = 0; i < numProcesses; i++){
+       /* for(int i = 0; i < numProcesses; i++){
             
             System.out.println("arrival time:  " + processArrayList.get(i).getArrivalTime()
                 + "  " + processArrayList.get(i).getExpectedTime()
                 + "  " + processArrayList.get(i).getPriority());
-        }
+        }*/
 
         return processArrayList;
     }
