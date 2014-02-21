@@ -96,9 +96,9 @@ public class Process
     public String toString()
     {
         String processString;
-        processString = "Arrival time is: " + arrivalTime 
-                + ",  Expected time is:  " + expectedTime
-                + ",  Priority is:  " + priority + ".\n";
+        processString = "\tArrival time is:  " + arrivalTime 
+                + ",\tExpected time is:  " + expectedTime
+                + ",\tPriority is:  " + priority + ".\n";
         
         return processString;
 

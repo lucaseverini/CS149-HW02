@@ -14,9 +14,16 @@ public class Main
     public static void main (String [] args)
     {
         ArrayList<Process> processArrayList = new ArrayList<>();
-        ProcessGenerator newProcesses = new ProcessGenerator(10);
+        //ProcessGenerator: first parameter is number of processes to generate
+        //                  second parameter is seed number for random function.
+        ProcessGenerator newProcesses = new ProcessGenerator(100, 1);
         processArrayList = newProcesses.generateProcesses();
-		FirstComeFirstServed a = new FirstComeFirstServed(processArrayList);
+        
+        
+        
+        //code for five First Come first Served process runs
+        FirstComeFirstServed a = new FirstComeFirstServed(processArrayList);
+        
         a.displayProcesses();
      }
 }
