@@ -21,6 +21,7 @@ public class Main
         
         //code for five First Come first Served process runs
         FirstComeFirstServed a = new FirstComeFirstServed(processArrayList);
+		
         
         a.displayProcesses();
      }
