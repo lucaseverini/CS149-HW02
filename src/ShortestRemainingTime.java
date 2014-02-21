@@ -1,10 +1,6 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
-
+	Developed by Luca Severini
+*/
 
 import java.util.*;
 /**
@@ -38,4 +34,12 @@ public class ShortestRemainingTime
         // put your code here
         return x + y;
     }
+	
+	public static void main (String [] args)
+	{
+		ProcessGenerator procGen = new ProcessGenerator(100, 1);
+		ArrayList<Process> procs = procGen.generateProcesses();
+		
+		System.out.println("xx");
+  	}
 }
