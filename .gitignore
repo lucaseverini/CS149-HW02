@@ -4,6 +4,6 @@
 *.jar
 *.war
 *.ear
-test/*
-build/*
-dist/*
+test/
+build/
+dist/
