@@ -11,6 +11,9 @@ public class Process
     private float expectedTime;//between 0.1 and 10
     private int priority;//1, 2, 3. or 4
     private String name;
+    private double responseTime = 0;
+    private double waitTime = 0;
+    private double turnaroundTime = 0;
 
     /**
      * Constructor for objects of class Process
