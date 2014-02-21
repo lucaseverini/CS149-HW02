@@ -10,6 +10,7 @@ public class Process
     private float arrivalTime;//between 0 and 99
     private float expectedTime;//between 0.1 and 10
     private int priority;//1, 2, 3. or 4
+    private String name;
 
     /**
      * Constructor for objects of class Process
@@ -17,11 +18,12 @@ public class Process
      * @param expectedTime
      * @param priority
      */
-    public Process(float arrivalTime, float expectedTime, int priority)
+    public Process(float arrivalTime, float expectedTime, int priority, String name)
     {
         this.arrivalTime = arrivalTime;
         this.expectedTime = expectedTime;
         this.priority = priority;
+        this.name = "[" + name +"]";
     }
 
     /**
@@ -80,6 +82,7 @@ public class Process
     /**
      * This sets the priority value
      *
+     * @param priority
      */
     public void setPriority(int priority)
     {
@@ -96,12 +99,13 @@ public class Process
     public String toString()
     {
         String processString;
-        processString = "\tArrival time is:  " + arrivalTime 
+        processString = name + "\tArrival time is:  " + arrivalTime 
                 + ",\tExpected time is:  " + expectedTime
-                + ",\tPriority is:  " + priority + ".\n";
+                + ",\tPriority is:  " + priority + "\n";
         
         return processString;
-
     }
+    
+   
 
 }

@@ -41,7 +41,9 @@ public class FirstComeFirstServed
         content += "First Come First Serve: \n";        
         for(int i=0; i < processArrayList.size(); i++){
             
-            if(letterCounter < 91){ 
+        content += processArrayList.get(i).toString();
+
+           /* if(letterCounter < 91){ 
         content += firstNumber + "-" + (char)(letterCounter) + ":  ";//
         content += processArrayList.get(i).toString();
         letterCounter++;
@@ -51,7 +53,7 @@ public class FirstComeFirstServed
         content += firstNumber + "-" + (char)(letterCounter) + ":  ";//
         content += processArrayList.get(i).toString();
         letterCounter++;
-            } 
+            } */
         }
     }
     
