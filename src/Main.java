@@ -19,11 +19,9 @@ public class Main
         ProcessGenerator newProcesses = new ProcessGenerator(100, 1);
         processArrayList = newProcesses.generateProcesses();
         
-        
-        
         //code for five First Come first Served process runs
         FirstComeFirstServed a = new FirstComeFirstServed(processArrayList);
-        
+		
         a.displayProcesses();
      }
 }
