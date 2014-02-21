@@ -11,9 +11,11 @@ public class Process
     private float expectedTime;//between 0.1 and 10
     private int priority;//1, 2, 3. or 4
     private String name;
-    private double responseTime = 0;
-    private double waitTime = 0;
-    private double turnaroundTime = 0;
+    private float responseTime = 0;
+    private float waitTime = 0;
+    private float turnaroundTime = 0;
+    private float startTime = 0;
+    private float finishTime = 0;
 
     /**
      * Constructor for objects of class Process
@@ -40,6 +42,29 @@ public class Process
         return arrivalTime;
     }
 
+    public void addToResponseTime(float amount){
+    responseTime += amount;
+}
+    public float getResponseTime(){
+        return responseTime;
+    }    
+    
+    public void addToWaitTime(float amount){
+    waitTime += amount;
+}
+    public float getWaitTime(){
+        return waitTime;
+    }    
+    
+    public void addToTurnaroundTime(float amount){
+    turnaroundTime += amount;
+}
+    public float turnaroundTime(){
+        return turnaroundTime;
+    } 
+    
+    
+    
     /**
      * This returns the expected time value
      *
@@ -92,6 +117,12 @@ public class Process
         // put your code here
         this.priority = priority;
     }
+    
+    public String getName(){
+        return name;
+    }
+    
+    
     
         /**
      * This sets the priority value
