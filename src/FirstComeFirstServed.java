@@ -22,40 +22,72 @@ public class FirstComeFirstServed {
 
     // instance variables - replace the example below with your own
     private ArrayList<Process> processArrayList;
-    private String content;
+    private String oneSimulation;//OVERALL STRING REPRESENTATION
+    private float averageWaitingTime;
+    private float averageResponseTime;
+    private float averageTurnaroundTime;
 
     /**
      * Constructor for objects of class FirstComeFirstServed
+     *
+     * @param processArrayList arrayList containing Process objects to endure
+     * simulation
      */
     public FirstComeFirstServed(ArrayList<Process> processArrayList) {
         // initialise instance variables
         this.processArrayList = processArrayList;
+        oneSimulation = "";
+        averageWaitingTime = 0;
+        averageResponseTime = 0;
+        averageTurnaroundTime = 0;
     }
 
-    public void simulateFCFS() {
+    public String simulateFCFS() {
 
         int numProcesses = 0;
         int quantum = 0;
-        double timeRemaining = 0;
+        double timeRemaining;
         String timeChart = "";
         Process currentProcess = processArrayList.get(numProcesses);//store first process
         timeRemaining = currentProcess.getExpectedTime();
-        boolean oldProcess = true;
         boolean processRunning = true;
+        boolean firstProcess = true;
 
-        while (processRunning) {//as long as there are processes being done continue processing
-            //if the current process has an arival time past than number of elapsed quantums
+        introduceProcess();//introduces processes that have been generated in advanced
+
+        while (processRunning) {//as long as there are active processes, continue processing
+            //if the current process has an arival time past than number of elapsed quantums, 
+            //iterate quantum value
             if (currentProcess.getArrivalTime() > quantum) {
-                quantum++;//good until here///////////////////////
+                quantum++;
             } else {
-                currentProcess.addToTurnaroundTime(1);//add to current processes turnaround time
-                timeChart += currentProcess.getName();//for printing out the chart of names
-                timeRemaining -= 1.0;
+                if (firstProcess) {//first process needs to record start time
+                    currentProcess.setStartTime(quantum);
+                    firstProcess = false;
+                }
+                timeRemaining -= 1.0;//time remaining on current process decrements one 
                 //if current process ends and still less than 100 quanta elapsed, start new process
                 if (timeRemaining < 0 && quantum < 99) {
+                    if ((quantum % 10) == 0) {//regarding formatting
+                        timeChart += ("\n" + currentProcess.getName());//for printing out  chart of names
+                    } else {
+                        timeChart += currentProcess.getName();//for printing out chart of names
+
+                    }
+                    currentProcess.setFinishTime(quantum + 1);//set  time value a process finishes
+                    //put new process object into currentProcess
                     numProcesses++;
                     currentProcess = processArrayList.get(numProcesses);
-                } else if (timeRemaining < 0 && quantum >= 99) {
+                    currentProcess.setStartTime(quantum + 1);
+                    //reset the time remaining to the replaced process's expected time value
+                    timeRemaining = currentProcess.getExpectedTime();
+                } else if (timeRemaining < 0 && quantum >= 99) {//for printing out the chart of names
+                    if ((quantum % 10) == 0) {
+                        timeChart += ("\n" + currentProcess.getName());
+                    } else {
+                        timeChart += currentProcess.getName();
+                    }
+                    currentProcess.setFinishTime(quantum + 1);//set the time value a process finishes
                     //if current process ends and is past 100 quanta, stop working
                     processRunning = false;
                 }
@@ -63,28 +95,76 @@ public class FirstComeFirstServed {
             }
 
         }
+        oneSimulation += "Simulated order of First Come First Serve";
+        oneSimulation += timeChart;
 
+        oneSimulation += "\n" + getStringOfAverages(numProcesses);
+
+        return oneSimulation;//this is the OVERALL STRING REPRESENTATION
+        //this will be sent to main, to be printed out along with all other 
+        //OVERALL STRING REPRESENTATION's
     }
 
     /**
-     * Constructor for objects of class FirstComeFirstServed
+     * This processes the average statistics for one simulation of this
+     * algorithm
+     *
+     * @param numProcesses the number of processes that started(were processed)
+     * during simulation
+     * @return 'averages' The string representing the averages to be attached to
+     * FCFS's OVERALL STRING REPRESENTATION
+     */
+    public String getStringOfAverages(int numProcesses) {
+        String averages = "";
+
+        //generates the averages for each required statistic
+        for (int i = 0; i < numProcesses; i++) {
+            averageWaitingTime += processArrayList.get(i).getWaitingTime();
+            averageResponseTime += processArrayList.get(i).getResponseTime();
+            averageTurnaroundTime += processArrayList.get(i).getTurnaroundTime();
+        }
+
+        averageWaitingTime = averageWaitingTime / numProcesses;
+        averageResponseTime = averageResponseTime / numProcesses;
+        averageTurnaroundTime = averageTurnaroundTime / numProcesses;
+
+        averages += "\nThe average Waiting time was: " + averageWaitingTime;
+        averages += "\nThe average Response time was: " + averageResponseTime;
+        averages += "\nThe average Turnaround time was: " + averageTurnaroundTime;
+
+        return averages;
+    }
+
+    /**
+     * This sets up a string value for all the process objects
+     *
      */
     public void introduceProcess() {
-        int letterCounter = 65;
-        int firstNumber = 1;
-
-        content += "First Come First Serve: \n";
+        String content = "First Come First Serve: \n";
         for (int i = 0; i < processArrayList.size(); i++) {
             content += processArrayList.get(i).toString();
         }
+        //displayProcess(content);//for testing purposes
+        oneSimulation += "\n" + content + "\n"; //adds to simulation's OVERALL STRING REPRESENTATION
     }
 
     /**
-     * An example of a method - replace this comment with your own
+     * This returns an array with the averages information
      *
+     * @return averages
      */
-    public void displayProcesses() {
-        introduceProcess();
+    public float[] getAverages() {
+        float[] averages = {averageWaitingTime, averageResponseTime, averageTurnaroundTime};
+        return averages;
+    }
+
+    /**
+     * This method will be replaced by a class that will be used in the main
+     * class to print everything to a single file all at once.
+     *
+     * @param text
+     */
+    public void displayProcess(String text) {
 
         try {
             File file = new File("test", "newFile.txt");
@@ -98,7 +178,7 @@ public class FirstComeFirstServed {
             BufferedWriter bw = new BufferedWriter(fw);
             //parameter 'content' is content to be written to file
             //should probably store in a string, then put here.
-            bw.write(content);
+            bw.write(text);
             bw.close();
             System.out.println("\nFirst Come First Serve has been printed to file. \n");
         } catch (IOException e) {
