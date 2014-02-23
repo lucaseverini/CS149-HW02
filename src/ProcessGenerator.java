@@ -14,6 +14,7 @@ public class ProcessGenerator {
     // instance variables - replace the example below with your own
     private int numProcesses;//Number of Process objects in array
     private ArrayList<Process> processArrayList;
+    private ArrayList<Process> unsortedArrayList;
     private Random generator;
     private Process newProcess;
     private int RandomSeed;
@@ -28,7 +29,7 @@ public class ProcessGenerator {
     public ProcessGenerator(int numProcesses, int RandomSeed) {
         // initialise instance variables
         this.numProcesses = numProcesses;
-        processArrayList = new ArrayList<Process>();
+        processArrayList = new ArrayList<>();
         this.RandomSeed = RandomSeed;
 
     }
@@ -82,6 +83,9 @@ public class ProcessGenerator {
         }
         //System.out.println("\n  ");
 
+        unsortedArrayList = new ArrayList<>();
+        unsortedArrayList = (ArrayList<Process>)processArrayList.clone();
+        
         Collections.sort(processArrayList, new Comparator<Process>() {
             @Override
             public int compare(Process process1, Process process2) {
@@ -103,4 +107,10 @@ public class ProcessGenerator {
          }*/
         return processArrayList;
     }
+    
+    public ArrayList<Process> getUnsortedArrayList(){
+        return unsortedArrayList;
+    } 
+    
+    
 }
