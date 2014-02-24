@@ -14,6 +14,8 @@ public class Process {
     private String name;
     private int startTime;
     private int finishTime;
+    private float timeRemaining;
+    private boolean processStarted;
 
     /**
      * Constructor for objects of class Process
@@ -30,23 +32,45 @@ public class Process {
         this.name = "[" + name + "]";
         startTime = 0;
         finishTime = 0;
+        timeRemaining = expectedTime;
+        processStarted = false;
 
     }
 
     /**
      * This returns value of waiting time
      *
+     * @return 
      */
     public float getWaitingTime() {
-        return (float) startTime - arrivalTime;
+        float waitingTime = startTime - arrivalTime; 
+        
+        return waitingTime; 
+    }
+
+
+    /**
+     * This returns value of process started
+     *
+     * @return 
+     */
+    public boolean getProcessStarted() {
+        return processStarted;
     }
 
     /**
      * This returns the value of the response time
      *
+     * @return 
      */
     public int getResponseTime() {
-        return finishTime - startTime;
+        int responseTime = finishTime - startTime; 
+        if (responseTime < 0){
+            //pritn something and break here
+            System.out.println("ResponseTime is negative");
+        }
+        
+        return responseTime;
     }
 
     /**
@@ -116,6 +140,7 @@ public class Process {
     public void setStartTime(int startTime) {
         // put your code here
         this.startTime = startTime;
+        processStarted = true;
     }
 
     /**
@@ -161,6 +186,23 @@ public class Process {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * This returns the time remaining value of the process
+     *
+     * @return
+     */
+    public float getTimeRemaining() {
+        return timeRemaining;
+    }
+
+    /**
+     * This returns the time remaining value of the process
+     *
+     */
+    public void runProcess() {
+        timeRemaining -= 1;
     }
 
     /**

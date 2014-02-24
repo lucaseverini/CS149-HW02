@@ -11,6 +11,9 @@ import java.util.*;
  */
 public class Main {
 
+    public static final int SIMULATIONS = 5; 
+    public static final int PROCESSES = 100; 
+    
     public static void main(String[] args) {
         printToFile printer = new printToFile();
         String simulationString = "";
@@ -32,15 +35,20 @@ public class Main {
         ArrayList<Process> processArrayList;
         ArrayList<Process> unsortedArrayList;
         FirstComeFirstServed FCFS;
+        ShortestJobFirst SJF;
 
         //Running 5 simulations, and adding results to 'totalFile' to be printed out
-        for (i = 0; i < 5; i++) {
-            newProcesses = new ProcessGenerator(100, i);
+        for (i = 0; i < SIMULATIONS; i++) {
+            newProcesses = new ProcessGenerator(PROCESSES, i);
             processArrayList = newProcesses.generateProcesses();
             unsortedArrayList = newProcesses.getUnsortedArrayList();
-            FCFS = new FirstComeFirstServed(processArrayList, unsortedArrayList);
-            simulationString = FCFS.simulateFCFS();
-            statistics = FCFS.getStatistics();
+
+            //FCFS = new FirstComeFirstServed(processArrayList, unsortedArrayList);
+            //simulationString = FCFS.simulateFCFS();
+            //statistics = FCFS.getStatistics();
+            SJF = new ShortestJobFirst(processArrayList, unsortedArrayList);
+            simulationString = SJF.simulateSJF();
+            statistics = SJF.getStatistics();
             totalFile += "\nSimulation #" + (i + 1) + " of First Come First Serve: \n";
             totalFile += simulationString;
 
@@ -53,7 +61,7 @@ public class Main {
         totalAverageWaitingTime = averageWaitingTime / i;
         totalAverageResponseTime = averageResponseTime / i;
         totalAverageTurnaroundTime = averageTurnaroundTime / i;
-        totalThroughput = throughput / (float)i;
+        totalThroughput = throughput / (float) i;
 
         totalFile += "\nTotal Average Waiting Time for FCFS was: " + totalAverageWaitingTime;
         totalFile += "\nTotal Average Response Time for FCFS was: " + totalAverageResponseTime;
