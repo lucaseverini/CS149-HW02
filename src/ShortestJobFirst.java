@@ -47,7 +47,6 @@ public class ShortestJobFirst {
         averageTurnaroundTime = 0;
         processQueue = new ArrayList<>();
         processesDone = new ArrayList<>();
-
     }
 
     public String simulateSJF() {
@@ -78,7 +77,8 @@ public class ShortestJobFirst {
                     processQueue.add(processArrayList.remove(0));
                 }
             }
-
+            //This is not repeating code. previous lines finish program if the 
+            // program is not fed enough processes to finish.      
             while (!processArrayList.isEmpty() && processArrayList.get(0).getArrivalTime() < quantum) {
                 processQueue.add(processArrayList.remove(0));
             }
@@ -103,9 +103,6 @@ public class ShortestJobFirst {
                 if (!processQueue.get(0).getProcessStarted()) {
                     processQueue.get(0).setStartTime(quantum);
                     String name = processQueue.get(0).getName();
-                    System.out.println();
-                    System.out.println("Setting start time for: " + name + " " + quantum);
-                    System.out.println();
                     startedProcesses++;
                 }
                 lastProcessEnded = false;
@@ -114,13 +111,11 @@ public class ShortestJobFirst {
             //run process
             if (!processQueue.isEmpty()) {
                 processQueue.get(0).runProcess();//timeRemaining -= 1;
-                System.out.println("The process being run is: " + processQueue.get(0).getName());
 
-                if (quantum < 99) {
+                if (quantum < 99) {//If the simulation is active
                     if (!processQueue.isEmpty() && !processQueue.get(0).getProcessStarted()) {
                         processQueue.get(0).setStartTime(quantum);
                         String name = processQueue.get(0).getName();
-                        System.out.println("[mm]Setting start time for: " + name + " " + quantum);
                         startedProcesses++;
                     }
 
@@ -141,8 +136,7 @@ public class ShortestJobFirst {
                         finishedProcesses++;
                         processesDone.add(processQueue.remove(0));
                     }
-
-                } else if (quantum >= 99) {
+                } else if (quantum >= 99) {//Simulation becomes inactive, does not accept new processes
                     lastProcessEnded = false;
                     if (processQueue.get(0).getProcessStarted()) {
                         if (processQueue.get(0).getTimeRemaining() < 0) {
@@ -154,16 +148,12 @@ public class ShortestJobFirst {
                             finishedProcesses++;
                             processQueue.get(0).setFinishTime(quantum + 1);
                             processesDone.add(processQueue.remove(0));
-                            System.out.println("the process is active? " + processQueue.get(0).getProcessStarted());
-                            System.out.println("TIME LESS THAN the process worked on is: " + processQueue.get(0).getName());
                         } else if (processQueue.get(0).getTimeRemaining() > 0) {
                             if ((quantum % 10) == 0) {
                                 timeChart += ("\n" + processQueue.get(0).getName());
                             } else {
                                 timeChart += processQueue.get(0).getName();
                             }
-                            System.out.println("the process is active? " + processQueue.get(0).getProcessStarted());
-                            System.out.println("TIME GREATER THAN the process worked on is: " + processQueue.get(0).getName());
                         }
                     } else if (!processQueue.get(0).getProcessStarted()) {
                         processRunning = false;
@@ -171,26 +161,19 @@ public class ShortestJobFirst {
                         processRunning = false;
                         System.out.println("something broke!!!!!!!!!!");
                     }
-                } // here
+                } 
             }
             startedProcesses = processesDone.size();
-            System.out.println("quantum: " + quantum);
-            System.out.println("started processes: " + startedProcesses);
-            System.out.println("ended Processes: " + finishedProcesses);
-//            if(processArrayList.isEmpty()){
-//                processRunning = false;
-//            }
-
+            
             quantum++;
-
         }
 
-        throughput = startedProcesses;
+        throughput = processesDone.size();
 
         oneSimulation += "Simulated order of Shortest Job First \n";
         oneSimulation += timeChart;
 
-        oneSimulation += "\n" + getStringOfAverages(startedProcesses);
+        oneSimulation += "\n" + getStringOfAverages(processesDone.size());
 
         return oneSimulation;//this is the OVERALL STRING REPRESENTATION
         //this will be sent to main, to be printed out along with all other 
