@@ -5,17 +5,21 @@
  * @author (your name)
  * @version (a version number or a date)
  */
-public class Process {
-
-    // instance variables - replace the example below with your own
-    private float arrivalTime;//between 0 and 99
-    private float expectedTime;//between 0.1 and 10
-    private int priority;//1, 2, 3. or 4
+public class Process 
+{
+    private float arrivalTime;		// between 0 and 99
+    private float expectedTime;		// between 0.1 and 10
+    private int priority;			// 1, 2, 3 or 4
     private String name;
     private int startTime;
     private int finishTime;
+<<<<<<< HEAD
     private float timeRemaining;
     private boolean processStarted;
+=======
+    private float timeToFinish;		// between 0.1 and 10. Is the time remaining to process completion (decremented by 1 every loop)
+	private boolean started;
+>>>>>>> 40fb1c7ce22db4c2f147e10c9bcbbbc70e52b666
 
     /**
      * Constructor for objects of class Process
@@ -30,17 +34,34 @@ public class Process {
         this.expectedTime = expectedTime;
         this.priority = priority;
         this.name = "[" + name + "]";
+<<<<<<< HEAD
         startTime = 0;
         finishTime = 0;
         timeRemaining = expectedTime;
         processStarted = false;
 
     }
+=======
+     }
+	
+   /**
+     * This is the run method
+     *
+     */
+	public void run()
+	{
+		System.out.println("process " + name + " running...");
+	}
+>>>>>>> 40fb1c7ce22db4c2f147e10c9bcbbbc70e52b666
 
     /**
      * This returns value of waiting time
      *
+<<<<<<< HEAD
      * @return 
+=======
+	 * @return 
+>>>>>>> 40fb1c7ce22db4c2f147e10c9bcbbbc70e52b666
      */
     public float getWaitingTime() {
         float waitingTime = startTime - arrivalTime; 
@@ -61,7 +82,11 @@ public class Process {
     /**
      * This returns the value of the response time
      *
+<<<<<<< HEAD
      * @return 
+=======
+	 * @return 
+>>>>>>> 40fb1c7ce22db4c2f147e10c9bcbbbc70e52b666
      */
     public int getResponseTime() {
         int responseTime = finishTime - startTime; 
@@ -76,6 +101,7 @@ public class Process {
     /**
      * This returns the value of the response time
      *
+	 * @return 
      */
     public float getTurnaroundTime() {
         return (float) finishTime - arrivalTime;
@@ -186,6 +212,44 @@ public class Process {
      */
     public String getName() {
         return name;
+    }
+	
+	/**
+     * This returns the started boolean flag
+     *
+     * @return value of started
+     */
+    public boolean getStarted() {
+        // put your code here
+        return started;
+    }
+	
+	/**
+     * This sets the started flag
+     *
+	 * @param started
+      */
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
+
+	/**
+     * This returns the timeToFinish value
+     *
+     * @return value of timeToFinish
+     */
+    public float getTimeToFinish() {
+        // put your code here
+        return timeToFinish;
+    }
+
+	/**
+     * This sets the timeToFinish value
+     *
+     * @param timeToFinish
+     */
+    public void setTimeToFinish(float timeToFinish) {
+        this.timeToFinish = timeToFinish;
     }
 
     /**

@@ -83,28 +83,28 @@ public class FirstComeFirstServed {
                 if (timeRemaining > 0 && quantum < 99 && !firstProcess) {
                     if ((quantum % 10) == 0) {//regarding formatting
                         timeChart += ("\n" + currentProcess.getName());//for printing out  chart of names
-                        System.out.println("timeChart = " + timeChart);
+                        System.out.println("timeChart:\n" + timeChart);
                         System.out.println("quantum: " + quantum + ",  process: " + processArrayList.get(numProcesses).getName() + "--quantum % 10 is true, timeRemaining > 0, quantum < 99");
                     } else {
                         timeChart += currentProcess.getName();//for printing out chart of names
-                        System.out.println("timeChart = " + timeChart);
+                        System.out.println("timeChart:\n" + timeChart);
                         System.out.println("quantum: " + quantum + ",  process: " + processArrayList.get(numProcesses).getName() + "--quantum % 10 is false, timeRemaining > 0, quantum < 99");
                     }
 
                 } else if (timeRemaining < 0 && quantum < 99) {
                     if ((quantum % 10) == 0) {//regarding formatting
                         timeChart += ("\n" + currentProcess.getName());//for printing out  chart of names
-                        System.out.println("timeChart = " + timeChart);
+                        System.out.println("timeChart:\n" + timeChart);
                         System.out.println("quantum: " + quantum + ",  process: " + processArrayList.get(numProcesses).getName() + "--quantum % 10 is true, timeRemaining < 0, quantum < 99");
                     } else {
                         timeChart += currentProcess.getName();//for printing out chart of names
-                        System.out.println("timeChart = " + timeChart);
+                        System.out.println("timeChart:\n" + timeChart);
                         System.out.println("quantum: " + quantum + ",  process: " + processArrayList.get(numProcesses).getName() + "--quantum % 10 is false, timeRemaining < 0, quantum < 99");
                     }
                     currentProcess.setFinishTime(quantum + 1);//set  time value a process finishes
                     System.out.println("quantum: " + quantum + ",  process: " + processArrayList.get(numProcesses).getName() + "--finish time set to: " + (quantum + 1));
 
-                    //put new process object into currentProcess
+                    // put new process object into currentProcess
                     numProcesses++;
                     System.out.println("quantum: " + quantum + ",  process: " + processArrayList.get(numProcesses).getName());
 
@@ -114,19 +114,19 @@ public class FirstComeFirstServed {
                     currentProcess.setStartTime(quantum + 1);
                     System.out.println("quantum: " + quantum + ",  process: " + processArrayList.get(numProcesses).getName() + "--start time set to" + (quantum + 1));
 
-                    //reset the time remaining to the replaced process's expected time value
+                    // reset the time remaining to the replaced process's expected time value
                     timeRemaining = currentProcess.getExpectedTime();
                     System.out.println("quantum: " + quantum + ",  process: " + processArrayList.get(numProcesses).getName() + "--timeRemaining set to: " + timeRemaining);
 
                 } else if (timeRemaining < 0 && quantum >= 99) {//for printing out the chart of names
                     if ((quantum % 10) == 0) {
                         timeChart += ("\n" + currentProcess.getName());
-                        System.out.println("timeChart = " + timeChart);
+                        System.out.println("timeChart:\n" + timeChart);
                         System.out.println("quantum: " + quantum + ",  process: " + processArrayList.get(numProcesses).getName() + "--quantum % 10 is true, timeRemaining < 0, quantum >= 99");
 
                     } else {
                         timeChart += currentProcess.getName();
-                        System.out.println("timeChart = " + timeChart);
+                        System.out.println("timeChart:\n" + timeChart);
                         System.out.println("quantum: " + quantum + ",  process: " + processArrayList.get(numProcesses).getName() + "--quantum % 10 is false, timeRemaining < 0, quantum >= 99");
 
                     }

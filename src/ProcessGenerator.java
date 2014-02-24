@@ -24,7 +24,7 @@ public class ProcessGenerator {
      * number of processes needed to be generated
      *
      * @param numProcesses: an integer, number of processes to be created
-     * @param RandomSeed
+     * @param RandomSeed: an integer, the random seed value used to generate the arrival, expected and priority of processes
      */
     public ProcessGenerator(int numProcesses, int RandomSeed) {
         // initialise instance variables
