@@ -1,4 +1,4 @@
-/*
+ /*
 	Developed by Luca Severini
 */
 
@@ -65,7 +65,7 @@ public class ShortestRemainingTime
 				
 				nextProcess.setTimeToFinish(nextProcess.getExpectedTime());
 				
-				System.out.println("process " + nextProcess.getName() + " added");
+				System.out.println("new process " + nextProcess.getName() + " added");
 							
 				if(processIdx < sortedProcessList.size() - 1)
 				{
@@ -85,12 +85,12 @@ public class ShortestRemainingTime
 				sortProcessesByTimeToFinish(runningProcessList);
 			}
 			
-			// Prepare to the process on top of runningProcessList if any... 
+			// The process to run is the process on top of runningProcessList
 			if(runningProcessList.size() > 0)
 			{
 				currentProcess = runningProcessList.get(0);
 				
-				// If the process never ran before does some setup...
+				// If the process never ran before do some setup...
 				if(!currentProcess.getStarted())
 				{
 					currentProcess.setStarted(true);
@@ -99,12 +99,8 @@ public class ShortestRemainingTime
 					System.out.println("process " + currentProcess.getName() + " started");
 				}
 			}
-			else
-			{
-				System.out.println("no process running (idle)");
-			}
 			
-			// Run the current Process...
+			// Run the current Process if any... 
 			if(currentProcess != null)
 			{
 				// This method, which does nothing, is just to show the current process running for a quantum
@@ -131,6 +127,10 @@ public class ShortestRemainingTime
 				{
 					sortProcessesByTimeToFinish(runningProcessList);
 				}
+			}
+			else
+			{
+				System.out.println("no process running (idle)");
 			}
 
 			quantum++;	// increment quanta's counter
@@ -176,7 +176,7 @@ public class ShortestRemainingTime
 	
 	public class ProcessComparator implements Comparator<Process> 
 	{
-		private int selector;
+		final private int selector;
 		
 		ProcessComparator (int selector)
 		{

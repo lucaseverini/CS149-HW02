@@ -13,6 +13,7 @@ public class Main {
 
     public static final int SIMULATIONS = 5;
     public static final int PROCESSES = 100;
+	public static final int QUANTA = 100;
 
     public static void main(String[] args) {
         printToFile printer = new printToFile();
@@ -21,25 +22,14 @@ public class Main {
         String RR;
         String FCFS;
         String SJF;
-
-        int idx;
+        String SRT;
+        String HPF;
 
         // ProcessGenerator: first parameter is number of processes to generate
         // second parameter is seed number for random function.
         ProcessGenerator newProcesses;
         ArrayList<Process> processArrayList;
-
-        //Running 5 simulations for SRT
-        for (idx = 1; idx < SIMULATIONS; idx++) {
-            newProcesses = new ProcessGenerator(PROCESSES, idx);
-            processArrayList = newProcesses.generateProcesses();
-
-            ShortestRemainingTime SRT = new ShortestRemainingTime(processArrayList);
-
-            simulationString = SRT.simulatePreemptive(PROCESSES);
-        }
-
-
+/*
         RR = runRR();
         totalFile += RR;
 
@@ -48,6 +38,12 @@ public class Main {
 
         FCFS = runFCFS();
         totalFile += FCFS;
+		
+        SRT = runSRT();
+        totalFile += SRT;
+*/
+		HPF = runHPF();
+        totalFile += HPF;
 
         printer.printToFile(totalFile);
 
@@ -228,5 +224,40 @@ public class Main {
 
         return totalFile;
     }
+	
+	public static String runSRT()
+	{
+        ArrayList<Process> processArrayList;
+		String simulationString = "";
 
+		for (int idx = 0; idx < SIMULATIONS; idx++) 
+		{
+            ProcessGenerator procGen = new ProcessGenerator(PROCESSES, idx);
+            processArrayList = procGen.generateProcesses();
+
+            ShortestRemainingTime SRT = new ShortestRemainingTime(processArrayList);
+
+            simulationString = SRT.simulatePreemptive(QUANTA);
+        }
+		
+		return simulationString;
+	}
+	
+	public static String runHPF()
+	{
+        ArrayList<Process> processArrayList;
+		String simulationString = "";
+
+		for (int idx = 0; idx < 1; idx++) 
+		{
+            ProcessGenerator procGen = new ProcessGenerator(20, idx);
+            processArrayList = procGen.generateProcesses();
+
+            HighestPriorityFirst HPF = new HighestPriorityFirst(processArrayList);
+
+            simulationString = HPF.simulatePreemptive(200);
+        }
+		
+		return simulationString;
+	}
 }

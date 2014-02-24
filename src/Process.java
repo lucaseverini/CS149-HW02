@@ -16,6 +16,7 @@ public class Process {
     private boolean processStarted;
     private float timeToFinish;		// between 0.1 and 10. Is the time remaining to process completion (decremented by 1 every loop)
     private boolean started;
+	private Process nextProcess;	// Next process in the list with same priority (used in HPF)
 
     /**
      * Constructor for objects of class Process
@@ -34,7 +35,6 @@ public class Process {
         finishTime = 0;
         timeRemaining = expectedTime;
         processStarted = false;
-
     }
 
 
@@ -246,6 +246,24 @@ public void run()
      */
     public float getTimeRemaining() {
         return timeRemaining;
+    }
+
+	/**
+     * This sets the nextProcess value
+     *
+     * @param nextProcess
+     */
+    public void setNextProcess(Process nextProcess) {
+        this.nextProcess = nextProcess;
+    }
+
+    /**
+     * This returns the next process in the list used by HPF
+     *
+     * @return
+     */
+    public Process getNextProcess() {
+        return nextProcess;
     }
 
     /**
