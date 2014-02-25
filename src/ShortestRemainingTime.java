@@ -144,8 +144,25 @@ public class ShortestRemainingTime
 	
 	private void printProcessList(ArrayList<Process> list)
 	{
+		System.out.println("Completed processes:");
 		for(Process p : list)
 		{
+			if(p.getFinishTime() == 0)
+			{
+				continue;
+			}
+			
+			System.out.printf("%s %d %6.3f %6.3f %2d %2d\n", p.getName(), p.getPriority(), p.getArrivalTime(),
+												p.getExpectedTime(), p.getStartTime(), p.getFinishTime());
+		}
+		System.out.println("Not completed processes:");
+		for(Process p : list)
+		{
+			if(p.getFinishTime() != 0)
+			{
+				continue;
+			}
+
 			System.out.printf("%s %d %6.3f %6.3f %2d %2d\n", p.getName(), p.getPriority(), p.getArrivalTime(),
 												p.getExpectedTime(), p.getStartTime(), p.getFinishTime());
 		}

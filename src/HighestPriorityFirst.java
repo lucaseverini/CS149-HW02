@@ -23,6 +23,7 @@ public class HighestPriorityFirst
  
     /**
      * Constructor for objects of class HighestPriorityFirst
+	 * 
 	 * @param processArrayList
 	 */
     public HighestPriorityFirst(ArrayList<Process> processArrayList)
@@ -32,7 +33,8 @@ public class HighestPriorityFirst
     }
 	
 	/**
-	 * Simulation of preemptive HPF
+	 * Simulation of Preemptive HPF
+	 * 
 	 * @param totQuanta
 	 * @return
 	 */
@@ -135,6 +137,22 @@ public class HighestPriorityFirst
 		return output;
 	}
 	
+	/**
+	 * Simulation of Non-Preemptive HPF
+	 * 
+	 * @param totQuanta
+	 * @return
+	 */
+	public String simulateNonPreemptive(int totQuanta) 
+	{
+		return "";
+	}
+	
+	/**
+	 * Add the process to the process list corresponding to its priority
+	 * 
+	 * @param process
+	 */
 	private void addProcess(Process process)
 	{
 		ArrayList<Process> proclist = null;
@@ -160,14 +178,16 @@ public class HighestPriorityFirst
 		
 		if(proclist != null)
 		{
-			proclist.add(process);
-
+			// Set the pointer to the next process in the last process object...
 			int listSize = proclist.size();
-			if(listSize > 1)
+			if(listSize > 0)
 			{
-				Process prevProcess = proclist.get(listSize - 2);
+				Process prevProcess = proclist.get(listSize - 1);
 				prevProcess.setNextProcess(process);
 			}
+			
+			// Add the process to the bottom of the list
+			proclist.add(process);
 		}
 		else
 		{
@@ -175,30 +195,63 @@ public class HighestPriorityFirst
 		}
 	}
 	
+	/**
+	 * Remove the process from the process list corresponding to its priority
+	 * 
+	 * @param process
+	 */
 	private void removeProcess(Process process)
 	{
+		ArrayList<Process> proclist = null;
+
 		switch(process.getPriority())
 		{
 			case 1:
-				P1ProcessList.remove(process);	
+				proclist = P1ProcessList;	
 				break;
 
 			case 2:
-				P2ProcessList.remove(process);
+				proclist = P2ProcessList;
 				break;
 
 			case 3:
-				P3ProcessList.remove(process);
+				proclist = P3ProcessList;
 				break;
 
 			case 4:
-				P4ProcessList.remove(process);
-				break;
+				proclist = P4ProcessList;
+		}
+
+		if(proclist != null)
+		{
+			// Update the pointer to the next process accordingly...
+			int processIdx = proclist.indexOf(process);
+			if(processIdx > 0)
+			{
+				Process nextProcess = null;
+				if(processIdx < proclist.size() - 1)
+				{
+					nextProcess = proclist.get(processIdx + 1);
+				}
+				
+				proclist.get(processIdx - 1).setNextProcess(nextProcess);
+			}
+		
+			// Remove the process from the list
+			proclist.remove(process);
 		}
 	}
 	
+	/**
+	 * Select the next process to run or return null if there is none
+	 * 
+	 * @param currentProcess
+	 * @return 
+	 */
 	private Process selectProcess(Process currentProcess)
 	{
+		Process process = null;
+		
 		int curPriority = 0;
 		if(currentProcess != null)
 		{
@@ -212,56 +265,99 @@ public class HighestPriorityFirst
 				case 1:
 					if(priority == curPriority)
 					{
-						return currentProcess;
+						if(currentProcess != null)
+						{
+							process = currentProcess.getNextProcess();
+						}
 					}
-					else if(P1ProcessList.size() > 0)
+					
+					if(process == null && P1ProcessList.size() > 0)
 					{
-						return P1ProcessList.get(0);	
+						process = P1ProcessList.get(0);	
 					}
 					break;
 
 				case 2:
 					if(priority == curPriority)
 					{
-						return currentProcess;
+						if(currentProcess != null)
+						{
+							process = currentProcess.getNextProcess();
+						}
 					}
-					else if(P2ProcessList.size() > 0)
+					
+					if(process == null && P2ProcessList.size() > 0)
 					{
-						return P2ProcessList.get(0);	
+						process = P2ProcessList.get(0);	
 					}
 					break;
 
 				case 3:
 					if(priority == curPriority)
 					{
-						return currentProcess;
+						if(currentProcess != null)
+						{
+							process = currentProcess.getNextProcess();
+						}
 					}
-					else if(P3ProcessList.size() > 0)
+					
+					if(process == null && P3ProcessList.size() > 0)
 					{
-						return P3ProcessList.get(0);	
+						process = P3ProcessList.get(0);	
 					}
 					break;
 
 				case 4:
 					if(priority == curPriority)
 					{
-						return currentProcess;
+						if(currentProcess != null)
+						{
+							process = currentProcess.getNextProcess();
+						}
 					}
-					else if(P4ProcessList.size() > 0)
+					
+					if(process == null && P4ProcessList.size() > 0)
 					{
-						return P4ProcessList.get(0);	
+						process = P4ProcessList.get(0);	
 					}
 					break;
+			}
+			
+			if(process != null)
+			{
+				return process;
 			}
 		}
 	
 		return null;
 	}
 	
+	/**
+	 * Print all the processes in the list
+	 * 
+	 * @param list
+	 */
 	private void printProcessList(ArrayList<Process> list)
 	{
+		System.out.println("Completed processes:");
 		for(Process p : list)
 		{
+			if(p.getFinishTime() == 0)
+			{
+				continue;
+			}
+			
+			System.out.printf("%s %d %6.3f %6.3f %2d %2d\n", p.getName(), p.getPriority(), p.getArrivalTime(),
+												p.getExpectedTime(), p.getStartTime(), p.getFinishTime());
+		}
+		System.out.println("Not completed processes:");
+		for(Process p : list)
+		{
+			if(p.getFinishTime() != 0)
+			{
+				continue;
+			}
+
 			System.out.printf("%s %d %6.3f %6.3f %2d %2d\n", p.getName(), p.getPriority(), p.getArrivalTime(),
 												p.getExpectedTime(), p.getStartTime(), p.getFinishTime());
 		}

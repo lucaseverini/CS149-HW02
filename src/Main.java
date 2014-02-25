@@ -250,12 +250,12 @@ public class Main {
 
 		for (int idx = 0; idx < 1; idx++) 
 		{
-            ProcessGenerator procGen = new ProcessGenerator(20, idx);
+            ProcessGenerator procGen = new ProcessGenerator(100, idx);
             processArrayList = procGen.generateProcesses();
 
             HighestPriorityFirst HPF = new HighestPriorityFirst(processArrayList);
 
-            simulationString = HPF.simulatePreemptive(200);
+            simulationString = HPF.simulatePreemptive(100);
         }
 		
 		return simulationString;
