@@ -6,16 +6,16 @@
 import java.util.*;
 
 /**
- *
  * @author arashzahoory
  */
-public class Main {
-
+public class Main 
+{
     public static final int SIMULATIONS = 5;
     public static final int PROCESSES = 100;
 	public static final int QUANTA = 100;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) 
+	{
         printToFile printer = new printToFile();
         String simulationString = "";
         String totalFile = "";
@@ -49,12 +49,10 @@ public class Main {
         totalFile += HPF;
 
         printer.printToFile(totalFile);
-
-        //printer.printToFile(simulationString);
     }
 
-    public static String runRR() {
-
+    public static String runRR() 
+	{
         ArrayList<Process> processArrayList;
         ArrayList<Process> unsortedArrayList;
 
@@ -112,7 +110,8 @@ public class Main {
         return totalFile;
     }
 
-    public static String runFCFS() {
+    public static String runFCFS() 
+	{
         ArrayList<Process> processArrayList;
         ArrayList<Process> unsortedArrayList;
         String simulationString;
@@ -169,11 +168,8 @@ public class Main {
         return totalFile;
     }
 
-    /**
-     *
-     * @return
-     */
-    public static String runSJF() {
+    public static String runSJF() 
+	{
         ArrayList<Process> processArrayList;
         ArrayList<Process> unsortedArrayList;
         String simulationString;
@@ -300,7 +296,7 @@ public class Main {
             ProcessGenerator procGen = new ProcessGenerator(PROCESSES, idx);
             processArrayList = procGen.generateProcesses();
 
-            HighestPriorityFirst HPF = new HighestPriorityFirst(processArrayList, true); // Preemptive
+            HighestPriorityFirst HPF = new HighestPriorityFirst(processArrayList, true, true); // Preemptive with Aging
 
             simulationString = HPF.simulate(QUANTA);	
 
@@ -310,7 +306,7 @@ public class Main {
 			{
                 totalFile += "---------------------------------------------------------------------------------------";
             }
-            totalFile += "\nSimulation #" + (idx + 1) + " of Highest Priority First (HPF) Preemptive: \n";
+            totalFile += "\nSimulation #" + (idx + 1) + " of Highest Priority First (HPF) Preemptive with Aging: \n";
             totalFile += simulationString;
 
 		    averageWaitingTime += statistics[0];
@@ -324,10 +320,10 @@ public class Main {
         totalAverageTurnaroundTime = averageTurnaroundTime / SIMULATIONS;
         totalThroughput = throughput / SIMULATIONS;
 
-        totalFile += "\nTotal Average Waiting Time for HPF Preemptive was: " + totalAverageWaitingTime;
-        totalFile += "\nTotal Average Response Time for HPF Preemptive was: " + totalAverageResponseTime;
-        totalFile += "\nTotal Average Turnaround for HPF Preemptive was: " + totalAverageTurnaroundTime;
-        totalFile += "\nTotal Average Throughput for HPF Preemptive was: " + totalThroughput + "\n\n";
+        totalFile += "\nTotal Average Waiting Time for HPF Preemptive with Aging was: " + totalAverageWaitingTime;
+        totalFile += "\nTotal Average Response Time for HPF Preemptive with Aging was: " + totalAverageResponseTime;
+        totalFile += "\nTotal Average Turnaround for HPF Preemptive with Aging was: " + totalAverageTurnaroundTime;
+        totalFile += "\nTotal Average Throughput for HPF Preemptive with Aging was: " + totalThroughput + "\n\n";
 
 		return totalFile;
 	}
@@ -352,7 +348,7 @@ public class Main {
             ProcessGenerator procGen = new ProcessGenerator(PROCESSES, idx);
             processArrayList = procGen.generateProcesses();
 
-            HighestPriorityFirst HPF = new HighestPriorityFirst(processArrayList, false); // Non-Preemptive
+            HighestPriorityFirst HPF = new HighestPriorityFirst(processArrayList, false, false); // Non-Preemptive without Aging
 
             simulationString = HPF.simulate(QUANTA);	
 

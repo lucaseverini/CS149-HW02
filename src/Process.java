@@ -12,6 +12,7 @@ public class Process
     private int priority;			// 1, 2, 3 or 4
     private int startTime;
     private int finishTime;
+    private int startWaitingTime;
     private float timeRemaining;
     private boolean processStarted;
     private float timeToFinish;		// between 0.1 and 10. Is the time remaining to process completion (decremented by 1 every loop)
@@ -26,23 +27,21 @@ public class Process
      * @param priority
      * @param name
      */
-    public Process(float arrivalTime, float expectedTime, int priority, String name) {
+    public Process(float arrivalTime, float expectedTime, int priority, String name) 
+	{
         this.arrivalTime = arrivalTime;
         this.expectedTime = expectedTime;
         this.priority = priority;
         this.name = "[" + name + "]";
-        startTime = 0;
-        finishTime = 0;
-        timeRemaining = expectedTime;
-        processStarted = false;
+        this.timeRemaining = expectedTime;
+        this.processStarted = false;
     }
 
-
-/**
- * This is the run method
- *
- */
-public void run()
+	/**
+	 * This is the run method
+	 *
+	 */
+	public void run()
 	{
 		System.out.println("process " + name + " running...");
 	}
@@ -50,28 +49,39 @@ public void run()
     /**
      * This returns value of waiting time
      *
-     * @return 
+     * @return value of waitingTime
      */
-    public float getWaitingTime() {
+    public float getWaitingTime() 
+	{
         float waitingTime = startTime - arrivalTime; 
         
         return waitingTime; 
     }
 
+   /**
+     * This returns value of waiting time
+     *
+     * @return value of startWaitingTime
+     */
+    public int getStartWaitingTime() 
+	{
+        return startWaitingTime; 
+    }
 
     /**
      * This returns value of process started
      *
-     * @return 
+     * @return value of processStarted
      */
-    public boolean getProcessStarted() {
+    public boolean getProcessStarted() 
+	{
         return processStarted;
     }
 
     /**
      * This returns the value of the response time
      *
-     * @return 
+     * @return value of responseTime
      */
     public int getResponseTime() 
 	{
@@ -100,9 +110,9 @@ public void run()
      *
      * @return value of arrivalTime
      */
-    public float getArrivalTime() {
-        // put your code here
-        return arrivalTime;
+    public float getArrivalTime() 
+	{
+         return arrivalTime;
     }
 
     /**
@@ -110,8 +120,8 @@ public void run()
      *
      * @return value of arrivalTime
      */
-    public float getExpectedTime() {
-        // put your code here
+    public float getExpectedTime() 
+	{
         return expectedTime;
     }
 
@@ -120,9 +130,9 @@ public void run()
      *
      * @return value of priority
      */
-    public int getPriority() {
-        // put your code here
-        return priority;
+    public int getPriority() 
+	{
+         return priority;
     }
 
     /**
@@ -130,8 +140,8 @@ public void run()
      *
      * @return value of priority
      */
-    public int getStartTime() {
-        // put your code here
+    public int getStartTime() 
+	{
         return startTime;
     }
 
@@ -140,8 +150,8 @@ public void run()
      *
      * @return value of priority
      */
-    public int getFinishTime() {
-        // put your code here
+    public int getFinishTime() 
+	{
         return finishTime;
     }
 
@@ -151,18 +161,29 @@ public void run()
      *
      * @param startTime
      */
-    public void setStartTime(int startTime) {
-        // put your code here
+    public void setStartTime(int startTime) 
+	{
         this.startTime = startTime;
         processStarted = true;
     }
 
-    /**
+   /**
+     * This sets the startWaitingTime time value
+     *
+     * @param startWaitingTime
+     */
+    public void setStartWaitingTime(int startWaitingTime) 
+	{
+        this.startWaitingTime = startWaitingTime;
+    }
+
+	/**
      * This sets the finish time value
      *
      * @param finishTime
      */
-    public void setFinishTime(int finishTime) {
+    public void setFinishTime(int finishTime) 
+	{
         this.finishTime = finishTime;
     }
 
@@ -171,7 +192,8 @@ public void run()
      *
      * @param arrivalTime
      */
-    public void setArrivalTime(float arrivalTime) {
+    public void setArrivalTime(float arrivalTime) 
+	{
         this.arrivalTime = arrivalTime;
     }
 
@@ -180,7 +202,8 @@ public void run()
      *
      * @param expectedTime
      */
-    public void setExpectedTime(float expectedTime) {
+    public void setExpectedTime(float expectedTime) 
+	{
         this.expectedTime = expectedTime;
     }
 
@@ -189,7 +212,8 @@ public void run()
      *
      * @param priority
      */
-    public void setPriority(int priority) {
+    public void setPriority(int priority) 
+	{
         this.priority = priority;
     }
 
@@ -198,7 +222,8 @@ public void run()
      *
      * @return
      */
-    public String getName() {
+    public String getName() 
+	{
         return name;
     }
 	
@@ -207,8 +232,8 @@ public void run()
      *
      * @return value of started
      */
-    public boolean getStarted() {
-        // put your code here
+    public boolean getStarted() 
+	{
         return started;
     }
 	
@@ -217,7 +242,8 @@ public void run()
      *
 	 * @param started
       */
-    public void setStarted(boolean started) {
+    public void setStarted(boolean started) 
+	{
         this.started = started;
     }
 
@@ -226,8 +252,8 @@ public void run()
      *
      * @return value of timeToFinish
      */
-    public float getTimeToFinish() {
-        // put your code here
+    public float getTimeToFinish() 
+	{
         return timeToFinish;
     }
 
@@ -236,16 +262,18 @@ public void run()
      *
      * @param timeToFinish
      */
-    public void setTimeToFinish(float timeToFinish) {
+    public void setTimeToFinish(float timeToFinish) 
+	{
         this.timeToFinish = timeToFinish;
     }
 
     /**
      * This returns the time remaining value of the process
      *
-     * @return
+     * @return timeRemaining
      */
-    public float getTimeRemaining() {
+    public float getTimeRemaining() 
+	{
         return timeRemaining;
     }
 
@@ -254,16 +282,18 @@ public void run()
      *
      * @param nextProcess
      */
-    public void setNextProcess(Process nextProcess) {
+    public void setNextProcess(Process nextProcess) 
+	{
         this.nextProcess = nextProcess;
     }
 
     /**
      * This returns the next process in the list used by HPF
      *
-     * @return
+     * @return nextProcess
      */
-    public Process getNextProcess() {
+    public Process getNextProcess() 
+	{
         return nextProcess;
     }
 
@@ -271,7 +301,8 @@ public void run()
      * This returns the time remaining value of the process
      *
      */
-    public void runProcess() {
+    public void runProcess() 
+	{
         timeRemaining -= 1;
     }
 

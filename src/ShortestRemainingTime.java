@@ -1,18 +1,21 @@
- /*
-	Developed by Luca Severini
+/*
+*	ShortestRemainingTime.java
+*
+*   Assignment #2 - CS149 - SJSU
+*
+*	By Luca Severini (lucaseverini@mac.com)
+* 
+*	San Jose Feb-25-2014
 */
 
 import java.util.*;
 
 /**
- * Write a description of class ShortestRemainingTime here.
- *
- * @author Luca Severini
- * @version Feb 23 2014
+ * This class implements the SRT (Shortest Remaining Time) scheduling algorithm
  */
-
 public class ShortestRemainingTime
 {
+	private int quantum;
 	private final ArrayList<Process> processList;
     private ArrayList<Process> sortedProcessList;
 	private ArrayList<Process> runningProcessList;
@@ -55,8 +58,10 @@ public class ShortestRemainingTime
 		Process nextProcess = null;
  		Process currentProcess = null;
  		int processIdx = 0;
-        int quantum = 0;
+        quantum = 0;
 		 
+		System.out.println("Simulation running for " + totQuanta + " quanta...");
+		
 		// Run loop for some quanta...
         while (quantum < totQuanta) 
 		{

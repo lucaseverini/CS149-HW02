@@ -1,19 +1,30 @@
- /*
-	Developed by Luca Severini
+/*
+*	HighestPriorityFirst.java
+*
+*   Assignment #2 - CS149 - SJSU
+*
+*	By Luca Severini (lucaseverini@mac.com)
+* 
+*	San Jose Feb-25-2014
 */
 
 import java.util.*;
 
 /**
- * Write a description of class HighestPriorityFirst here.
- *
- * @author Luca Severini
- * @version Feb 24 2014
+ * HighestPriorityFirst
+ * 
+ * This class implements the HPF (Highest Priority First) scheduling algorithm
+ * with two optional options: Preemptiveness and Aging
  */
-
 public class HighestPriorityFirst
 {
+	private final int HIGHER_PRIORITY = 1;
+	private final int LOWER_PRIORITY = 4;
+	private final int MAX_WAITING = 5;
+
 	private final boolean preemptive;
+	private final boolean aging;
+    private int quantum;
 	private final ArrayList<Process> processList;
  	private final ArrayList<Process> runningProcessList;
     private ArrayList<Process> sortedProcessList;
@@ -33,10 +44,12 @@ public class HighestPriorityFirst
 	 * 
 	 * @param processArrayList
 	 * @param preemptive
+	 * @param aging
 	 */
-    public HighestPriorityFirst(ArrayList<Process> processArrayList, boolean preemptive)
+    public HighestPriorityFirst(ArrayList<Process> processArrayList, boolean preemptive, boolean aging)
     {
 		this.preemptive = preemptive;
+		this.aging = aging;
 		this.processList = processArrayList;
 		this.runningProcessList = new ArrayList<>();
     }
@@ -65,12 +78,14 @@ public class HighestPriorityFirst
 /*
 		printProcessList(sortedProcessList);
 		System.out.println();
-*/ 
+*/
 		Process nextProcess = null;
  		Process currentProcess = null;
  		int processIdx = 0;
-        int quantum = 0;
+        quantum = 0;
 		 
+		System.out.println("Simulation running for " + totQuanta + " quanta...");
+
 		// Run loop for some quanta...
         while (quantum < totQuanta) 
 		{
@@ -214,15 +229,24 @@ public class HighestPriorityFirst
 		System.out.println();
 */
 	    throughput = processesDone.size();
+		
+		oneSimulation += "Simulated order of Highest Priority First";
 
 		if(preemptive)
 		{
-			oneSimulation += "Simulated order of Highest Priority First Premeptive\n";
+			oneSimulation += " Preemptive";
 		}
 		else
 		{
-			oneSimulation += "Simulated order of Highest Priority First Non-Premeptive\n";
+			oneSimulation += " Non-Preemptive";
 		}
+		
+		if(aging)
+		{
+			oneSimulation += " with Aging";
+		}
+		
+		oneSimulation += "\n";
 		
         oneSimulation += timeChart;
 
@@ -230,18 +254,7 @@ public class HighestPriorityFirst
 
         return oneSimulation;//this is the OVERALL STRING REPRESENTATION
 	}
-	
-	/**
-	 * Simulation of Non-Preemptive HPF
-	 * 
-	 * @param totQuanta
-	 * @return
-	 */
-	public String simulateNonPreemptive(int totQuanta) 
-	{
-		return "";
-	}
-	
+		
 	/**
 	 * Add the process to the process list corresponding to its priority
 	 * 
@@ -282,6 +295,8 @@ public class HighestPriorityFirst
 			
 			// Add the process to the bottom of the list
 			proclist.add(process);
+			
+			process.setStartWaitingTime(quantum);
 		}
 		else
 		{
@@ -350,13 +365,79 @@ public class HighestPriorityFirst
 		if(currentProcess != null)
 		{
 			curPriority = currentProcess.getPriority();
+			
+			currentProcess.setStartWaitingTime(quantum);
 		}
+		
+		// if aging is enabled move up some process if they are waiting more than MAX_WAITING quanta
+		if(aging)
+		{
+			int listSize = P2ProcessList.size();
+			for(int idx = 0; idx < listSize; idx++)
+			{
+				Process p = P2ProcessList.get(idx);
+				
+				float waitingTime = p.getStartWaitingTime();
+				if(waitingTime >= 0 && quantum > waitingTime + MAX_WAITING)
+				{
+					P2ProcessList.remove(p);
+					idx--;
+					listSize--;
+					
+					p.setPriority(1);
+					p.setStartWaitingTime(quantum);
+					P1ProcessList.add(p);
+					
+					System.out.println("aging process " + p.getName() + " moved up to priority 1");
+				}
+			}
 
-		for(int priority = 1; priority <= 4; priority++)
+			listSize = P3ProcessList.size();
+			for(int idx = 0; idx < listSize; idx++)
+			{
+				Process p = P3ProcessList.get(idx);
+				
+				float waitingTime = p.getStartWaitingTime();
+				if(waitingTime >= 0 && quantum > waitingTime + MAX_WAITING)
+				{
+					P3ProcessList.remove(p);
+					idx--;
+					listSize--;
+					
+					p.setPriority(2);
+					p.setStartWaitingTime(quantum);
+					P2ProcessList.add(p);
+
+					System.out.println("aging process " + p.getName() + " moved up to priority 2");
+				}
+			}
+
+			listSize = P4ProcessList.size();
+			for(int idx = 0; idx < listSize; idx++)
+			{
+				Process p = P4ProcessList.get(idx);
+				
+				float waitingTime = p.getStartWaitingTime();
+				if(waitingTime >= 0 && quantum > waitingTime + MAX_WAITING)
+				{
+					P4ProcessList.remove(p);
+					idx--;
+					listSize--;
+					
+					p.setPriority(3);
+					p.setStartWaitingTime(quantum);
+					P3ProcessList.add(p);
+
+					System.out.println("aging process " + p.getName() + " moved up to priority 3");
+				}
+			}
+		}
+		
+		for(int priority = HIGHER_PRIORITY; priority <= LOWER_PRIORITY; priority++)
 		{
 			switch(priority)
 			{
-				case 1:
+				case HIGHER_PRIORITY:
 					if(priority == curPriority)
 					{
 						if(currentProcess != null)
@@ -401,7 +482,7 @@ public class HighestPriorityFirst
 					}
 					break;
 
-				case 4:
+				case LOWER_PRIORITY:
 					if(priority == curPriority)
 					{
 						if(currentProcess != null)
@@ -419,6 +500,8 @@ public class HighestPriorityFirst
 			
 			if(process != null)
 			{
+				process.setStartWaitingTime(-1);
+				
 				return process;
 			}
 		}
@@ -442,7 +525,7 @@ public class HighestPriorityFirst
 			}
 			
 			System.out.printf("%s %d %6.3f %6.3f %2d %2d\n", p.getName(), p.getPriority(), p.getArrivalTime(),
-												p.getExpectedTime(), p.getStartTime(), p.getFinishTime());
+														p.getExpectedTime(), p.getStartTime(), p.getFinishTime());
 		}
 		System.out.println("Not completed processes:");
 		for(Process p : list)
@@ -453,7 +536,7 @@ public class HighestPriorityFirst
 			}
 
 			System.out.printf("%s %d %6.3f %6.3f %2d %2d\n", p.getName(), p.getPriority(), p.getArrivalTime(),
-												p.getExpectedTime(), p.getStartTime(), p.getFinishTime());
+														p.getExpectedTime(), p.getStartTime(), p.getFinishTime());
 		}
 	}
 	
@@ -470,7 +553,8 @@ public class HighestPriorityFirst
         }
         // displayProcess(content);	// for testing purposes
         oneSimulation = "\n" + content + "\n"; // adds to simulation's OVERALL STRING REPRESENTATION
-        System.out.println(oneSimulation);
+        
+		System.out.println(oneSimulation);
     }
 	
 	/**
@@ -501,7 +585,7 @@ public class HighestPriorityFirst
         float totalTurnaroundTime = 0;
         float waitingTime = 0;
 
-        //generates the averages for each required statistic
+        // generates the averages for each required statistic
         for (int idx = 0; idx < numProcesses; idx++) 
 		{
             waitingTime = processesDone.get(idx).getWaitingTime();
@@ -510,7 +594,7 @@ public class HighestPriorityFirst
                 System.out.println("negative!");
             }
 
-            totalWaitingTime += waitingTime;//processesDone.get(i).getWaitingTime();
+            totalWaitingTime += waitingTime;
             totalResponseTime += processesDone.get(idx).getResponseTime();
             totalTurnaroundTime += processesDone.get(idx).getTurnaroundTime();
         }
