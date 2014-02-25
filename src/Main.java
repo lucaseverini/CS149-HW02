@@ -29,7 +29,7 @@ public class Main {
         // second parameter is seed number for random function.
         ProcessGenerator newProcesses;
         ArrayList<Process> processArrayList;
-/*
+
         RR = runRR();
         totalFile += RR;
 
@@ -41,8 +41,11 @@ public class Main {
 		
         SRT = runSRT();
         totalFile += SRT;
-*/
-		HPF = runHPF();
+
+		HPF = runHPF_Preemptive();
+        totalFile += HPF;
+
+		HPF = runHPF_NonPreemptive();
         totalFile += HPF;
 
         printer.printToFile(totalFile);
@@ -139,6 +142,7 @@ public class Main {
 
             FCFS = new FirstComeFirstServed(processArrayList, unsortedArrayList);
             simulationString = FCFS.simulateFCFS();
+			
             statistics = FCFS.getStatistics();
             if (i == 0) {
                 totalFile += "---------------------------------------------------------------------------------------";
@@ -228,7 +232,17 @@ public class Main {
 	public static String runSRT()
 	{
         ArrayList<Process> processArrayList;
-		String simulationString = "";
+		String simulationString;
+		String totalFile = "";
+		float[] statistics;
+        float averageWaitingTime = 0;
+        float averageTurnaroundTime = 0;
+        float averageResponseTime = 0;
+        float throughput = 0;
+        float totalAverageWaitingTime;
+        float totalAverageTurnaroundTime;
+        float totalAverageResponseTime;
+        float totalThroughput;
 
 		for (int idx = 0; idx < SIMULATIONS; idx++) 
 		{
@@ -238,26 +252,135 @@ public class Main {
             ShortestRemainingTime SRT = new ShortestRemainingTime(processArrayList);
 
             simulationString = SRT.simulatePreemptive(QUANTA);
-        }
+
+		    statistics = SRT.getStatistics();
+            if (idx == 0) 
+			{
+                totalFile += "---------------------------------------------------------------------------------------";
+            }
+            totalFile += "\nSimulation #" + (idx + 1) + " of Shortest Remaining  Time (SRT): \n";
+            totalFile += simulationString;
+
+		    averageWaitingTime += statistics[0];
+            averageResponseTime += statistics[2];
+            averageTurnaroundTime += statistics[1];
+            throughput += statistics[3];
+		}
 		
-		return simulationString;
+		totalAverageWaitingTime = averageWaitingTime / SIMULATIONS;
+        totalAverageResponseTime = averageResponseTime / SIMULATIONS;
+        totalAverageTurnaroundTime = averageTurnaroundTime / SIMULATIONS;
+        totalThroughput = throughput / SIMULATIONS;
+
+        totalFile += "\nTotal Average Waiting Time for SRT was: " + totalAverageWaitingTime;
+        totalFile += "\nTotal Average Response Time for SRT was: " + totalAverageResponseTime;
+        totalFile += "\nTotal Average Turnaround for SRT was: " + totalAverageTurnaroundTime;
+        totalFile += "\nTotal Average Throughput for SRT was: " + totalThroughput + "\n\n";
+
+		return totalFile;
 	}
 	
-	public static String runHPF()
+	public static String runHPF_Preemptive()
 	{
         ArrayList<Process> processArrayList;
-		String simulationString = "";
+		String simulationString;
+		String totalFile = "";
+		float[] statistics;
+        float averageWaitingTime = 0;
+        float averageTurnaroundTime = 0;
+        float averageResponseTime = 0;
+        float throughput = 0;
+        float totalAverageWaitingTime;
+        float totalAverageTurnaroundTime;
+        float totalAverageResponseTime;
+        float totalThroughput;
 
-		for (int idx = 0; idx < 1; idx++) 
+		for (int idx = 0; idx < SIMULATIONS; idx++) 
 		{
-            ProcessGenerator procGen = new ProcessGenerator(100, idx);
+            ProcessGenerator procGen = new ProcessGenerator(PROCESSES, idx);
             processArrayList = procGen.generateProcesses();
 
-            HighestPriorityFirst HPF = new HighestPriorityFirst(processArrayList);
+            HighestPriorityFirst HPF = new HighestPriorityFirst(processArrayList, true); // Preemptive
 
-            simulationString = HPF.simulatePreemptive(100);
-        }
+            simulationString = HPF.simulate(QUANTA);	
+
+			statistics = HPF.getStatistics();
+			
+            if (idx == 0) 
+			{
+                totalFile += "---------------------------------------------------------------------------------------";
+            }
+            totalFile += "\nSimulation #" + (idx + 1) + " of Highest Priority First (HPF) Preemptive: \n";
+            totalFile += simulationString;
+
+		    averageWaitingTime += statistics[0];
+            averageResponseTime += statistics[2];
+            averageTurnaroundTime += statistics[1];
+            throughput += statistics[3];
+		}
 		
-		return simulationString;
+		totalAverageWaitingTime = averageWaitingTime / SIMULATIONS;
+        totalAverageResponseTime = averageResponseTime / SIMULATIONS;
+        totalAverageTurnaroundTime = averageTurnaroundTime / SIMULATIONS;
+        totalThroughput = throughput / SIMULATIONS;
+
+        totalFile += "\nTotal Average Waiting Time for HPF Preemptive was: " + totalAverageWaitingTime;
+        totalFile += "\nTotal Average Response Time for HPF Preemptive was: " + totalAverageResponseTime;
+        totalFile += "\nTotal Average Turnaround for HPF Preemptive was: " + totalAverageTurnaroundTime;
+        totalFile += "\nTotal Average Throughput for HPF Preemptive was: " + totalThroughput + "\n\n";
+
+		return totalFile;
+	}
+
+	public static String runHPF_NonPreemptive()
+	{
+        ArrayList<Process> processArrayList;
+		String simulationString;
+		String totalFile = "";
+		float[] statistics;
+        float averageWaitingTime = 0;
+        float averageTurnaroundTime = 0;
+        float averageResponseTime = 0;
+        float throughput = 0;
+        float totalAverageWaitingTime;
+        float totalAverageTurnaroundTime;
+        float totalAverageResponseTime;
+        float totalThroughput;
+
+		for (int idx = 0; idx < SIMULATIONS; idx++) 
+		{
+            ProcessGenerator procGen = new ProcessGenerator(PROCESSES, idx);
+            processArrayList = procGen.generateProcesses();
+
+            HighestPriorityFirst HPF = new HighestPriorityFirst(processArrayList, false); // Non-Preemptive
+
+            simulationString = HPF.simulate(QUANTA);	
+
+			statistics = HPF.getStatistics();
+			
+            if (idx == 0) 
+			{
+                totalFile += "---------------------------------------------------------------------------------------";
+            }
+            totalFile += "\nSimulation #" + (idx + 1) + " of Highest Priority First (HPF) Non-Preemptive: \n";
+            totalFile += simulationString;
+
+		    averageWaitingTime += statistics[0];
+            averageResponseTime += statistics[2];
+            averageTurnaroundTime += statistics[1];
+            throughput += statistics[3];
+		}
+		
+		totalAverageWaitingTime = averageWaitingTime / SIMULATIONS;
+        totalAverageResponseTime = averageResponseTime / SIMULATIONS;
+        totalAverageTurnaroundTime = averageTurnaroundTime / SIMULATIONS;
+        totalThroughput = throughput / SIMULATIONS;
+
+        totalFile += "\nTotal Average Waiting Time for HPF Non-Preemptive was: " + totalAverageWaitingTime;
+        totalFile += "\nTotal Average Response Time for HPF Non-Preemptive was: " + totalAverageResponseTime;
+        totalFile += "\nTotal Average Turnaround for HPF Non-Preemptive was: " + totalAverageTurnaroundTime;
+        totalFile += "\nTotal Average Throughput for HPF Non-Preemptive was: " + totalThroughput + "\n\n";
+
+		return totalFile;
 	}
 }

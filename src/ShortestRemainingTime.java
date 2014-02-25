@@ -16,7 +16,13 @@ public class ShortestRemainingTime
 	private final ArrayList<Process> processList;
     private ArrayList<Process> sortedProcessList;
 	private ArrayList<Process> runningProcessList;
- 
+	private ArrayList<Process> processesDone;
+	private String oneSimulation;
+    private float averageWaitingTime;
+    private float averageResponseTime;
+    private float averageTurnaroundTime;
+    private int throughput;
+
     /**
      * Constructor for objects of class ShortestRemainingTime
 	 * @param processArrayList
@@ -24,7 +30,7 @@ public class ShortestRemainingTime
     public ShortestRemainingTime(ArrayList<Process> processArrayList)
     {
 		this.processList = processArrayList;
-     }
+    }
 	
 	/**
 	 * Simulation of preemptive SRT
@@ -33,16 +39,19 @@ public class ShortestRemainingTime
 	 */
 	public String simulatePreemptive(int totQuanta) 
 	{
-		String output = "";
+		String timeChart = "";
+		
+		introduceProcess();
 		
 		sortedProcessList = processList;
 		sortProcessesByArrivalTime(sortedProcessList);
 		
 		runningProcessList = new ArrayList<>();
-		
+		processesDone = new ArrayList<>();
+/*		
 		printProcessList(sortedProcessList);
 		System.out.println();
- 
+*/ 
 		Process nextProcess = null;
  		Process currentProcess = null;
  		int processIdx = 0;
@@ -103,6 +112,8 @@ public class ShortestRemainingTime
 			// Run the current Process if any... 
 			if(currentProcess != null)
 			{
+				timeChart += currentProcess.getName();
+				
 				// This method, which does nothing, is just to show the current process running for a quantum
 				currentProcess.run();
 				
@@ -121,6 +132,9 @@ public class ShortestRemainingTime
 					currentProcess.setFinishTime(quantum);
 					
 					runningProcessList.remove(currentProcess);
+					
+					processesDone.add(currentProcess);
+					
 					currentProcess = null;
 				}
 				else
@@ -135,11 +149,18 @@ public class ShortestRemainingTime
 
 			quantum++;	// increment quanta's counter
 		}
-		
+/*		
 		printProcessList(sortedProcessList);
 		System.out.println();
+*/
+	    throughput = processesDone.size();
 
-		return output;
+        oneSimulation += "Simulated order of Shortest Remaining Time\n";
+        oneSimulation += timeChart;
+
+        oneSimulation += "\n" + getStringOfAverages(processesDone.size());
+
+        return oneSimulation;//this is the OVERALL STRING REPRESENTATION
 	}
 	
 	private void printProcessList(ArrayList<Process> list)
@@ -182,14 +203,77 @@ public class ShortestRemainingTime
 	{
 		Collections.sort(list, new ProcessComparator(0));
 	}
-	 
-	public static void main (String [] args)
+	 	
+   /**
+     * This sets up a string value for all the process objects
+     *
+     */
+	public void introduceProcess() 
 	{
-		ProcessGenerator procGen = new ProcessGenerator(100, 1);
-		ArrayList<Process> procs = procGen.generateProcesses();
-		
-		System.out.println("xx");
-  	}
+        String content = "";
+        for (int idx = 0; idx < processList.size(); idx++) 
+		{
+            content += processList.get(idx).toString();
+        }
+        // displayProcess(content);	// for testing purposes
+        oneSimulation = "\n" + content + "\n"; // adds to simulation's OVERALL STRING REPRESENTATION
+        System.out.println(oneSimulation);
+    }
+	
+	/**
+     * This returns an array with the statistics information
+     *
+     * @return averages
+     */
+    public float[] getStatistics() 
+	{
+        float[] averages = { averageWaitingTime, averageResponseTime, averageTurnaroundTime, throughput};
+        return averages;
+    }
+
+   /**
+     * This processes the average statistics for one simulation of this
+     * algorithm
+     *
+     * @param numProcesses the number of processes that started(were processed)
+     * during simulation
+     * @return 'averages' The string representing the averages to be attached to
+     * FCFS's OVERALL STRING REPRESENTATION
+     */
+    public String getStringOfAverages(int numProcesses) 
+	{
+        String averages = "";
+        float totalWaitingTime = 0;
+        float totalResponseTime = 0;
+        float totalTurnaroundTime = 0;
+        float waitingTime = 0;
+
+        //generates the averages for each required statistic
+        for (int idx = 0; idx < numProcesses; idx++) 
+		{
+            waitingTime = processesDone.get(idx).getWaitingTime();
+            if (waitingTime < 0) 
+			{
+                System.out.println("negative!");
+            }
+
+            totalWaitingTime += waitingTime;//processesDone.get(i).getWaitingTime();
+            totalResponseTime += processesDone.get(idx).getResponseTime();
+            totalTurnaroundTime += processesDone.get(idx).getTurnaroundTime();
+        }
+
+        System.out.println();
+
+        averageWaitingTime = totalWaitingTime / numProcesses;
+        averageResponseTime = totalResponseTime / numProcesses;
+        averageTurnaroundTime = totalTurnaroundTime / numProcesses;
+
+        averages += "\nThe average Waiting time was: " + averageWaitingTime;
+        averages += "\nThe average Response time was: " + averageResponseTime;
+        averages += "\nThe average Turnaround time was: " + averageTurnaroundTime + "\n\n";
+
+        return averages;
+    }
 	
 	public class ProcessComparator implements Comparator<Process> 
 	{

@@ -13,10 +13,10 @@ import java.util.*;
 public class RoundRobin {
 
     // instance variables
-    private ArrayList<Process> processArrayList;
-    private ArrayList<Process> unsortedArrayList;
-    private ArrayList<Process> processQueue;
-    private ArrayList<Process> processesDone;
+    private final ArrayList<Process> processArrayList;
+    private final ArrayList<Process> unsortedArrayList;
+    private final ArrayList<Process> processQueue;
+    private final ArrayList<Process> processesDone;
     private String oneSimulation;//OVERALL STRING REPRESENTATION
     private float averageWaitingTime;
     private float averageResponseTime;
@@ -85,7 +85,8 @@ public class RoundRobin {
                 firstProcess = false;
             }
             //run process
-            if (!processQueue.isEmpty()) {
+            if (!processQueue.isEmpty()) 
+			{
                 processQueue.get(0).runProcess();//timeRemaining -= 1;
 
                 if (quantum < 99) {//If the simulation is active
@@ -225,7 +226,7 @@ public class RoundRobin {
      * @return averages
      */
     public float[] getStatistics() {
-        float[] averages = {averageWaitingTime, averageResponseTime, averageTurnaroundTime, throughput};
+        float[] averages = { averageWaitingTime, averageResponseTime, averageTurnaroundTime, throughput};
         return averages;
     }
 

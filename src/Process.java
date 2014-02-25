@@ -4,12 +4,12 @@
  * @author (your name)
  * @version (a version number or a date)
  */
-public class Process {
-
+public class Process 
+{
+    private final String name;
     private float arrivalTime;		// between 0 and 99
     private float expectedTime;		// between 0.1 and 10
     private int priority;			// 1, 2, 3 or 4
-    private String name;
     private int startTime;
     private int finishTime;
     private float timeRemaining;
@@ -51,7 +51,6 @@ public void run()
      * This returns value of waiting time
      *
      * @return 
-	 * @return 
      */
     public float getWaitingTime() {
         float waitingTime = startTime - arrivalTime; 
@@ -73,11 +72,12 @@ public void run()
      * This returns the value of the response time
      *
      * @return 
-	 * @return 
      */
-    public int getResponseTime() {
+    public int getResponseTime() 
+	{
         int responseTime = finishTime - startTime; 
-        if (responseTime < 0){
+        if (responseTime < 0)
+		{
             //pritn something and break here
             System.out.println("ResponseTime is negative");
         }
@@ -90,7 +90,8 @@ public void run()
      *
 	 * @return 
      */
-    public float getTurnaroundTime() {
+    public float getTurnaroundTime() 
+	{
         return (float) finishTime - arrivalTime;
     }
 

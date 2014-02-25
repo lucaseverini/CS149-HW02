@@ -13,6 +13,7 @@ import java.util.*;
 
 public class HighestPriorityFirst
 {
+	private final boolean preemptive;
 	private final ArrayList<Process> processList;
  	private final ArrayList<Process> runningProcessList;
     private ArrayList<Process> sortedProcessList;
@@ -20,14 +21,22 @@ public class HighestPriorityFirst
 	private ArrayList<Process> P2ProcessList;
     private ArrayList<Process> P3ProcessList;
     private ArrayList<Process> P4ProcessList;
- 
+ 	private ArrayList<Process> processesDone;
+	private String oneSimulation;
+    private float averageWaitingTime;
+    private float averageResponseTime;
+    private float averageTurnaroundTime;
+    private int throughput;
+
     /**
      * Constructor for objects of class HighestPriorityFirst
 	 * 
 	 * @param processArrayList
+	 * @param preemptive
 	 */
-    public HighestPriorityFirst(ArrayList<Process> processArrayList)
+    public HighestPriorityFirst(ArrayList<Process> processArrayList, boolean preemptive)
     {
+		this.preemptive = preemptive;
 		this.processList = processArrayList;
 		this.runningProcessList = new ArrayList<>();
     }
@@ -38,9 +47,11 @@ public class HighestPriorityFirst
 	 * @param totQuanta
 	 * @return
 	 */
-	public String simulatePreemptive(int totQuanta) 
+	public String simulate(int totQuanta) 
 	{
-		String output = "";
+		String timeChart = "";
+		
+		introduceProcess();
 				
 		sortedProcessList = processList;
 		sortProcessesByArrivalTime(sortedProcessList);
@@ -49,10 +60,12 @@ public class HighestPriorityFirst
 		P2ProcessList = new ArrayList<>();
 		P3ProcessList = new ArrayList<>();
 		P4ProcessList = new ArrayList<>();
-
+		
+		processesDone = new ArrayList<>();
+/*
 		printProcessList(sortedProcessList);
 		System.out.println();
- 
+*/ 
 		Process nextProcess = null;
  		Process currentProcess = null;
  		int processIdx = 0;
@@ -62,7 +75,7 @@ public class HighestPriorityFirst
         while (quantum < totQuanta) 
 		{
 			System.out.println("quantum " + quantum + " :");
-			
+
 			// Add the processes to the running list as they become arrive...
 			if(nextProcess == null && processIdx < sortedProcessList.size())
 			{
@@ -86,55 +99,136 @@ public class HighestPriorityFirst
 				}
 			}
 			
-			// Select the process to run from a queue based on higher priority... 
-			currentProcess = selectProcess(currentProcess);
-			
-			// Run the current Process if any... 
-			if(currentProcess != null)
+			if(preemptive)
 			{
-				// If the process never ran before do some setup...
-				if(!currentProcess.getStarted())
+				// Select the process to run from a queue based on higher priority... 
+				currentProcess = selectProcess(currentProcess);
+			
+				// Run the current Process if any... 
+				if(currentProcess != null)
 				{
-					currentProcess.setStarted(true);
-					currentProcess.setStartTime(quantum);
-					
-					System.out.println("process " + currentProcess.getName() + " started");
-				}
+					// If the process never ran before do some setup...
+					if(!currentProcess.getStarted())
+					{
+						currentProcess.setStarted(true);
+						currentProcess.setStartTime(quantum);
 
-				// This method, which does nothing, is just to show the current process running for a quantum
-				currentProcess.run();
-				
-				float timeToFinish = currentProcess.getTimeToFinish() - 1;
-				if(timeToFinish <= 0)
+						System.out.println("process " + currentProcess.getName() + " started");
+					}
+
+					timeChart += currentProcess.getName();
+					
+					// This method, which does nothing, is just to show the current process running for a quantum
+					currentProcess.run();
+
+					float timeToFinish = currentProcess.getTimeToFinish() - 1;
+					if(timeToFinish <= 0)
+					{
+						timeToFinish = 0;
+					}
+
+					currentProcess.setTimeToFinish(timeToFinish);
+
+					if(timeToFinish == 0)
+					{
+						System.out.println("process " + currentProcess.getName() + " terminated");
+
+						currentProcess.setFinishTime(quantum);
+
+						removeProcess(currentProcess);
+						
+						processesDone.add(currentProcess);
+						
+						currentProcess = null;
+					}
+				}
+				else
 				{
-					timeToFinish = 0;
+					System.out.println("no process running (idle)");
 				}
 				
-				currentProcess.setTimeToFinish(timeToFinish);
-				
-				if(timeToFinish == 0)
-				{
-					System.out.println("process " + currentProcess.getName() + " terminated");
-					
-					currentProcess.setFinishTime(quantum);
-					
-					removeProcess(currentProcess);
-					currentProcess = null;
-				}
+				quantum++;	// increment quanta's counter
 			}
 			else
 			{
-				System.out.println("no process running (idle)");
-			}
+				// Select the process to run from a queue based on higher priority... 
+				currentProcess = selectProcess(currentProcess);
+				
+				// Run the current Process if any... 
+				if(currentProcess != null)
+				{
+					// If the process never ran before do some setup...
+					if(!currentProcess.getStarted())
+					{
+						currentProcess.setStarted(true);
+						currentProcess.setStartTime(quantum);
 
-			quantum++;	// increment quanta's counter
+						System.out.println("process " + currentProcess.getName() + " started");
+					}
+
+					while (quantum < totQuanta) 
+					{		
+						timeChart += currentProcess.getName();
+						
+						// This method, which does nothing, is just to show the current process running for a quantum
+						currentProcess.run();
+						
+						float timeToFinish = currentProcess.getTimeToFinish() - 1;
+						if(timeToFinish <= 0)
+						{
+							timeToFinish = 0;
+						}
+
+						currentProcess.setTimeToFinish(timeToFinish);
+
+						if(timeToFinish == 0)
+						{
+							System.out.println("process " + currentProcess.getName() + " terminated");
+
+							currentProcess.setFinishTime(quantum);
+
+							removeProcess(currentProcess);
+												
+							processesDone.add(currentProcess);
+
+							currentProcess = null;
+							break;
+						}
+
+						quantum++;
+						
+						System.out.println("quantum " + quantum + " :");
+					}
+				}
+				else
+				{
+					System.out.println("no process running (idle)");
+				}
+				
+				quantum++;
+			}
 		}
-		
+/*		
 		sortProcessesByFinishTime(sortedProcessList);
 		printProcessList(sortedProcessList);
 		System.out.println();
+*/
+	    throughput = processesDone.size();
 
-		return output;
+		if(preemptive)
+		{
+			oneSimulation += "Simulated order of Highest Priority First Premeptive\n";
+		}
+		else
+		{
+			oneSimulation += "Simulated order of Highest Priority First Non-Premeptive\n";
+		}
+		
+        oneSimulation += timeChart;
+
+        oneSimulation += "\n" + getStringOfAverages(processesDone.size());
+
+        return oneSimulation;//this is the OVERALL STRING REPRESENTATION
 	}
 	
 	/**
@@ -363,10 +457,82 @@ public class HighestPriorityFirst
 		}
 	}
 	
+   /**
+     * This sets up a string value for all the process objects
+     *
+     */
+	public void introduceProcess() 
+	{
+        String content = "";
+        for (int idx = 0; idx < processList.size(); idx++) 
+		{
+            content += processList.get(idx).toString();
+        }
+        // displayProcess(content);	// for testing purposes
+        oneSimulation = "\n" + content + "\n"; // adds to simulation's OVERALL STRING REPRESENTATION
+        System.out.println(oneSimulation);
+    }
+	
+	/**
+     * This returns an array with the statistics information
+     *
+     * @return averages
+     */
+    public float[] getStatistics() 
+	{
+        float[] averages = { averageWaitingTime, averageResponseTime, averageTurnaroundTime, throughput};
+        return averages;
+    }
+
+   /**
+     * This processes the average statistics for one simulation of this
+     * algorithm
+     *
+     * @param numProcesses the number of processes that started(were processed)
+     * during simulation
+     * @return 'averages' The string representing the averages to be attached to
+     * FCFS's OVERALL STRING REPRESENTATION
+     */
+    public String getStringOfAverages(int numProcesses) 
+	{
+        String averages = "";
+        float totalWaitingTime = 0;
+        float totalResponseTime = 0;
+        float totalTurnaroundTime = 0;
+        float waitingTime = 0;
+
+        //generates the averages for each required statistic
+        for (int idx = 0; idx < numProcesses; idx++) 
+		{
+            waitingTime = processesDone.get(idx).getWaitingTime();
+            if (waitingTime < 0) 
+			{
+                System.out.println("negative!");
+            }
+
+            totalWaitingTime += waitingTime;//processesDone.get(i).getWaitingTime();
+            totalResponseTime += processesDone.get(idx).getResponseTime();
+            totalTurnaroundTime += processesDone.get(idx).getTurnaroundTime();
+        }
+
+        System.out.println();
+
+        averageWaitingTime = totalWaitingTime / numProcesses;
+        averageResponseTime = totalResponseTime / numProcesses;
+        averageTurnaroundTime = totalTurnaroundTime / numProcesses;
+
+        averages += "\nThe average Waiting time was: " + averageWaitingTime;
+        averages += "\nThe average Response time was: " + averageResponseTime;
+        averages += "\nThe average Turnaround time was: " + averageTurnaroundTime + "\n\n";
+
+        return averages;
+    }
+
 	private void sortProcessesByFinishTime(ArrayList<Process> list)
 	{
 		Collections.sort(list, new ProcessComparator(3));
 	}
+	
 	private void sortProcessesByTimeToFinish(ArrayList<Process> list)
 	{
 		Collections.sort(list, new ProcessComparator(2));
@@ -381,15 +547,7 @@ public class HighestPriorityFirst
 	{
 		Collections.sort(list, new ProcessComparator(0));
 	}
-	 
-	public static void main (String [] args)
-	{
-		ProcessGenerator procGen = new ProcessGenerator(100, 1);
-		ArrayList<Process> procs = procGen.generateProcesses();
-		
-		System.out.println("xx");
-  	}
-	
+	 	
 	public class ProcessComparator implements Comparator<Process> 
 	{
 		final private int selector;
